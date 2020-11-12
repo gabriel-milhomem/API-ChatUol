@@ -64,3 +64,7 @@ server.post("/messages", (req, res) => {
     addMessage(from, to, text, type);
     res.sendStatus(200);
 });
+
+server.get("/participants", (req, res) => {
+    res.send(users.map(u => ({name: u.name})));
+});
