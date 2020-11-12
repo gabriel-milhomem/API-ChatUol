@@ -32,3 +32,7 @@ server.post('/participants', (req, res) => {
     });
     return res.sendStatus(200);
 });
+
+server.get("/messages", (req, res) => {
+    res.send(messages);
+});
