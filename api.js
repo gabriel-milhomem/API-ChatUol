@@ -25,11 +25,10 @@ const addMessage = (from, to, text, type) => {
 
 const addUsers = (name) => {
     users.push({name, lastStatus: Date.now()});
-    console.log("prim", users);
 }
 
 const isInvalid = (from, to, text, type) => {
-    const notAParticipant = users.every(user => user.name !== name);
+    const notAParticipant = users.every(user => user.name !== from);
 
     if (!(from && to && text)) {
         return true;
@@ -50,7 +49,7 @@ server.post('/participants', (req, res) => {
         return res.sendStatus(404);
     }
     addUsers(name);
-    addMessage(name, 'Todos', 'entra na sala...', 'status')
+    addMessage(name, 'Todos', 'entra na sala...', 'status');
     res.sendStatus(200);
 });
 
@@ -79,6 +78,12 @@ server.post("/status", (req, res) => {
         return res.sendStatus(400);
     }
     users = users.map(user => (user.name === name) ? {name, lastStatus: Date.now()}: user);
-    console.log("segun", users);
     res.sendStatus(200);
 });
+
+setInterval(() => {
+    const now = Date.now();
+    const usersLeft = users.filter(user => now - user.lastStatus > 10000);
+    usersLeft.forEach(user => addMessage(user.name, 'Todos', 'sai da sala...', 'status'));
+    users = users.filter(user => now - user.lastStatus < 10000);
+}, 15000);
