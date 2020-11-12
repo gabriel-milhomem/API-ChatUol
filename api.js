@@ -25,16 +25,19 @@ const addMessage = (from, to, text, type) => {
 
 const addUsers = (name) => {
     users.push({name, lastStatus: Date.now()});
+    console.log("prim", users);
 }
 
 const isInvalid = (from, to, text, type) => {
+    const notAParticipant = users.every(user => user.name !== name);
+
     if (!(from && to && text)) {
         return true;
     }
     if (type !== 'message' && type !== 'private_message') {
         return true;
     }
-    if (users.every(u => u.name !== from)) {
+    if (notAParticipant) {
         return true;
     }
     return false;
@@ -66,5 +69,16 @@ server.post("/messages", (req, res) => {
 });
 
 server.get("/participants", (req, res) => {
-    res.send(users.map(u => ({name: u.name})));
+    res.send(users.map(user => ({name: user.name})));
+});
+
+server.post("/status", (req, res) => {
+    const { name } = req.body;
+    const notAParticipant = users.every(u => u.name !== name);
+    if (notAParticipant) {
+        return res.sendStatus(400);
+    }
+    users = users.map(user => (user.name === name) ? {name, lastStatus: Date.now()}: user);
+    console.log("segun", users);
+    res.sendStatus(200);
 });
