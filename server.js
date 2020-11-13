@@ -1,29 +1,30 @@
 const express = require('express');
 const cors = require('cors');
 
-const server = express();
-const { readFile, createJSON } = require('./file-sync');
-const { 
-    toStrip, addMessage, notAParticipant, filterUsersLeft, isInvalid
-    , filterOnlineUsers, setUserStatus, addUsers, showMessages
-} = require('./utils');
+const { readFile, createJSON } = require('./utils/file-sync');
+const { toStrip, addMessage, showMessages, isInvalid, notAParticipant } = require('./utils/messages');
+const { filterUsersLeft, filterOnlineUsers, setUserStatus, addUsers } = require('./utils/users');
 
+// Configs
+
+createJSON();
+const server = express();
 server.use(cors());
 server.use(express.json());
 server.listen(3000);
-createJSON();
 
 // Status
 
 setInterval(() => {
     const now = Date.now();
-    filterOnlineUsers(now);
     filterUsersLeft(now);
+    filterOnlineUsers(now);
 }, 15000);
 
 server.post("/status", (req, res) => {
     const { name } = req.body;
     const notParticipant = notAParticipant(name);
+
     if (notParticipant) {
         return res.sendStatus(400);
     }
@@ -34,12 +35,15 @@ server.post("/status", (req, res) => {
 // Messages
 
 server.get("/messages", (req, res) => {
-    const messages = showMessages();
+    const name = req.headers['user-name'];
+    const messages = showMessages(name);
+
     res.send(messages);
 });
 
 server.post("/messages", (req, res) => {
     let [ from, to, text, type ] = Object.values(req.body).map((input) => toStrip(input));
+
     if (isInvalid(from, to, text, type)) {
         return res.sendStatus(400);
     }
@@ -51,11 +55,13 @@ server.post("/messages", (req, res) => {
 
 server.get("/participants", (req, res) => {
     const { users } = readFile();
+
     res.send(users.map(user => ({name: user.name})));
 });
 
 server.post('/participants', (req, res) => {
     let { name } = req.body;
+
     name = toStrip(name);
     if (!name) {
         return res.sendStatus(404);

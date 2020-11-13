@@ -1,15 +1,19 @@
 const fs = require('fs');
 const path = require('path');
 
-const dataPath = './data.json';
+const dataPath = './data/data.json';
+
+// data.json manipulation
 
 const writeFile = (content) => {
     const contentString = JSON.stringify(content);
+
     fs.writeFileSync(path.resolve(dataPath), contentString);
 }
 
 const readFile = () => {
     const file = fs.readFileSync(path.resolve(dataPath));
+    
     return JSON.parse(file);
 }
 
