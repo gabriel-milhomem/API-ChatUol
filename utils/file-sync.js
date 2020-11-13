@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const dataPath = './data/data.json';
+const dataPath = './data.json';
 
 // data.json manipulation
 
