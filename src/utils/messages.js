@@ -43,12 +43,7 @@ const filteredMessages = (name) => {
 const showMessages = (name) => {
     const limit = 100;
     const messages = filteredMessages(name);
-
-    if (messages.length < limit) {
-        return messages;
-    } else {
-        return messages.slice(messages.length - limit);;
-    }
+    return messages.slice(-limit);
 }
 
 const isInvalid = (from, to, text, type) => {

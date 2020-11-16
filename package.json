@@ -1,26 +1,27 @@
 {
-  "name": "10-api-bate-papo-uol",
+  "name": "API-ChatUol",
   "version": "1.0.0",
-  "description": "",
-  "main": "api.js",
+  "description": "Seu primeiro projeto back-end será a construção da API que completará seu projeto do bate-papo UOL!",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gabriel-milhomem/10-api-bate-papo-uol.git"
+    "url": "git+https://github.com/gabriel-milhomem/API-ChatUol.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/gabriel-milhomem/10-api-bate-papo-uol/issues"
+    "url": "https://github.com/gabriel-milhomem/API-ChatUol/issues"
   },
-  "homepage": "https://github.com/gabriel-milhomem/10-api-bate-papo-uol#readme",
+  "homepage": "https://github.com/gabriel-milhomem/API-ChatUol#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "dayjs": "^1.9.6",
     "express": "^4.17.1",
+    "nodemon": "^2.0.6",
     "path": "^0.12.7",
     "string-strip-html": "^6.3.0"
   }

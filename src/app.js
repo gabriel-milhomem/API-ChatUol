@@ -8,10 +8,10 @@ const { filterUsersLeft, filterOnlineUsers, setUserStatus, addUsers } = require(
 // Configs
 
 createJSON();
-const server = express();
-server.use(cors());
-server.use(express.json());
-server.listen(3000);
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.listen(3000);
 
 // Status
 
@@ -21,7 +21,7 @@ setInterval(() => {
     filterOnlineUsers(now);
 }, 15000);
 
-server.post("/status", (req, res) => {
+app.post("/status", (req, res) => {
     const { name } = req.body;
     const notParticipant = notAParticipant(name);
 
@@ -34,14 +34,14 @@ server.post("/status", (req, res) => {
 
 // Messages
 
-server.get("/messages", (req, res) => {
+app.get("/messages", (req, res) => {
     const name = req.headers['user-name'];
     const messages = showMessages(name);
 
     res.send(messages);
 });
 
-server.post("/messages", (req, res) => {
+app.post("/messages", (req, res) => {
     let [ from, to, text, type ] = Object.values(req.body).map((input) => toStrip(input));
 
     if (isInvalid(from, to, text, type)) {
@@ -53,13 +53,13 @@ server.post("/messages", (req, res) => {
 
 // Participants
 
-server.get("/participants", (req, res) => {
+app.get("/participants", (req, res) => {
     const { users } = readFile();
 
     res.send(users.map(user => ({name: user.name})));
 });
 
-server.post('/participants', (req, res) => {
+app.post('/participants', (req, res) => {
     let { name } = req.body;
 
     name = toStrip(name);
