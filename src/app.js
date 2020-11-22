@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const { readFile, createJSON } = require('./utils/file-sync');
-const { toStrip, addMessage, showMessages, isInvalid, notAParticipant } = require('./utils/messages');
+const { toStrip, addMessage, showMessages, validateMessagesValues, checkIfNotAParticipant } = require('./utils/messages');
 const { filterUsersLeft, filterOnlineUsers, setUserStatus, addUsers } = require('./utils/users');
 
 // Configs
@@ -23,7 +23,7 @@ setInterval(() => {
 
 app.post("/status", (req, res) => {
     const { name } = req.body;
-    const notParticipant = notAParticipant(name);
+    const notParticipant = checkIfNotAParticipant(name);
 
     if (notParticipant) {
         return res.sendStatus(400);
@@ -44,7 +44,7 @@ app.get("/messages", (req, res) => {
 app.post("/messages", (req, res) => {
     let [ from, to, text, type ] = Object.values(req.body).map((input) => toStrip(input));
 
-    if (isInvalid(from, to, text, type)) {
+    if (validateMessagesValues(from, to, text, type)) {
         return res.sendStatus(400);
     }
     addMessage(from, to, text, type);

@@ -12,7 +12,7 @@ const toStrip = (string) => {
     return stripHtml(string).result.trim();
 }
 
-const notAParticipant = (participant) => {
+const checkIfNotAParticipant = (participant) => {
     const { users } = readFile();
 
     return users.every(user => user.name !== participant);
@@ -31,7 +31,7 @@ const addMessage = (from, to, text, type) => {
     writeFile(data);
 }
 
-const filteredMessages = (name) => {
+const getFilteredMessages = (name) => {
     const { messages } = readFile();
 
     return messages.filter(msg => (
@@ -42,12 +42,12 @@ const filteredMessages = (name) => {
 
 const showMessages = (name) => {
     const limit = 100;
-    const messages = filteredMessages(name);
+    const messages = getFilteredMessages(name);
     return messages.slice(-limit);
 }
 
-const isInvalid = (from, to, text, type) => {
-    const notParticipant = notAParticipant(from);
+const validateMessagesValues = (from, to, text, type) => {
+    const notParticipant = checkIfNotAParticipant(from);
 
     if (!(from && to && text)) {
         return true;
@@ -61,4 +61,4 @@ const isInvalid = (from, to, text, type) => {
     return false;
 }
 
-module.exports = { toStrip, addMessage, isInvalid, showMessages, notAParticipant };
+module.exports = { toStrip, addMessage, validateMessagesValues, showMessages, checkIfNotAParticipant };
