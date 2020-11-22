@@ -64,7 +64,7 @@ app.post('/participants', (req, res) => {
 
     name = toStrip(name);
     if (!name) {
-        return res.sendStatus(404);
+        return res.sendStatus(400);
     }
     addUsers(name);
     addMessage(name, 'Todos', 'entra na sala...', 'status');
